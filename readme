@@ -1,0 +1,10 @@
+Chrome extension to visually upgrade MercadoLibre's comment section
+
+TODO:
+1. Init development folder structure for developing chrome extensions
+2. Create a manifest file
+3. Create front-side UI for comment replacement widget
+4. Create first iteration of regex matching ml's product links
+5. Create logic for detecting comment which matches the regex
+6. Load the widget data
+7. Replace the link with (loaded?) widget
