@@ -8,3 +8,12 @@ TODO:
 5. Create logic for detecting comment which matches the regex
 6. Load the widget data
 7. Replace the link with (loaded?) widget
+
+
+// curl -X GET https://api.mercadolibre.com/products/MLA6408981
+// 
+// Los productos/links que no empiezan con articulo. , tienen el codigo de producto al final.
+// Ej: https://www.mercadolibre.com.ar/disco-solido-interno-kingston-sa400s37240g-240gb/p/MLA6408981
+
+width 300px
+height 60-65
