@@ -5,6 +5,7 @@
   "main": "content.js",
   "dependencies": {},
   "devDependencies": {
+    "cz-conventional-changelog": "^3.2.0",
     "eslint": "^7.4.0",
     "eslint-config-prettier": "^6.11.0",
     "prettier": "2.0.5"
@@ -21,5 +22,10 @@
   "bugs": {
     "url": "https://github.com/tomasshaw/ml_ext/issues"
   },
-  "homepage": "https://github.com/tomasshaw/ml_ext#readme"
+  "homepage": "https://github.com/tomasshaw/ml_ext#readme",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
