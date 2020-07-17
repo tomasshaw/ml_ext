@@ -25,15 +25,33 @@ async function main(){
 }
 
 async function createNewComments(textArray){
-	const newCommentArray = await Promise.all(textArray.map(async (word, index) => {
+	const newCommentArray = await Promise.all(textArray.map(async word => {
 		const matched = word.match("articulo.mercadolibre.com.ar")
 		if(matched){
 			const [itemPrice, itemName, itemPicture] = await getProductInfo(matched.input)
-			return `${itemName}, ${itemPrice}, <img src=${itemPicture}>`
+			return `${itemName}, $${itemPrice}, <img src=${itemPicture}>`
+		}
+		const newMatched = word.match('[p][\/]{1}[MLml]{2}[A-z]{1}[0-9]+')
+		if(newMatched){
+			const [itemPrice, itemName, itemPicture] = await getProductInfoWithApi(newMatched[0].split('/').pop())
+			return `${itemName}, $${itemPrice}, <img src=${itemPicture}>`
 		}
 		return word
 	}))
 	return newCommentArray
+}
+
+async function getProductInfoWithApi(match){
+	const link = `https://api.mercadolibre.com/products/${match}`
+	const res = await fetch(link, {
+		method: 'GET'
+	})
+	const productJSON = await res.json()
+	return [
+		productJSON.buy_box_winner.price,
+		productJSON.name,
+		productJSON.pictures[0].url
+	]
 }
 
 async function getProductInfo(link){
