@@ -1,0 +1,36 @@
+{
+    "env": {
+        "browser": true,
+        "es2020": true
+    },
+	"extends": ["prettier", "eslint:recommended"],
+    "parserOptions": {
+        "ecmaVersion": 11,
+        "sourceType": "module"
+    },
+	"plugins": [
+		"prettier"
+	],
+    "rules": {
+        "indent": [
+            "error",
+            "tab"
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "never"
+        ],
+		"max-len": [
+			"error",
+			{"code": 80}
+		]
+    }
+}

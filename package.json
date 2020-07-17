@@ -1,0 +1,25 @@
+{
+  "name": "ml_ext",
+  "version": "1.0.0",
+  "description": "Chrome extension to visually upgrade MercadoLibre's comment section",
+  "main": "content.js",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^7.4.0",
+    "eslint-config-prettier": "^6.11.0",
+    "prettier": "2.0.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomasshaw/ml_ext.git"
+  },
+  "author": "Thomas A. Shaw",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tomasshaw/ml_ext/issues"
+  },
+  "homepage": "https://github.com/tomasshaw/ml_ext#readme"
+}
