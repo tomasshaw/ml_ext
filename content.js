@@ -53,13 +53,13 @@ function createHTMLWidget({ itemPrice, itemName, itemPicture, itemLink }) {
 	const htmlWidget = `
 		<style>
 			.wrapperDiv {
-				margin: 4px;
-				width: 500px;
+				margin: 4px 0;
+				width: calc(100% - 2px);
 				height: 70px;
-				border: 1px solid;
+				border: 2px solid;
 				border-color: rgb(245,245,245);
 				border-radius: 4px;
-				box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+				box-shadow: 2px 2px 2px 1px rgba(0,0,0,.1);
 				display: flex;
 			}
 			.ml_widget_picture {
@@ -74,6 +74,21 @@ function createHTMLWidget({ itemPrice, itemName, itemPicture, itemLink }) {
 			.ml_name_and_title {
 				display: flex;
 				flex-direction: column;
+				width: 100%;
+			}
+			.ml_h5_text{
+				text-decoration: none;
+				color: rgba(0, 0, 0, 0.8);
+				text-align: center;
+			}
+			.ml_item_title{
+				text-decoration: none;
+				color: rgba(0, 0, 0, 0.8);
+			}
+			.ml_item_price{
+				text-decoration: none;
+				color: rgba(0, 0, 0, 0.8);
+				margin: auto;
 			}
 			.productImage {
 				max-width: 65px;
@@ -92,7 +107,8 @@ function createHTMLWidget({ itemPrice, itemName, itemPicture, itemLink }) {
 			<img class="productImage" src=${itemPicture}>
 		</div>
 		<div class="ml_name_and_title">
-			<h5>${itemName}</h5><h5>$${itemPrice}</h5>
+			<h5 class="ml_h5_text ml_item_title">${itemName}</h5>
+			<h5 class="ml_h5_text ml_item_price">$ ${itemPrice}</h5>
 		</div>
 		</a>`
 	return htmlWidget

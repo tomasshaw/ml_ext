@@ -8,4 +8,5 @@ TODO:
 ✓ 5. Create logic for detecting comment which matches the regex
 ✓ 6. Load the widget data
 ✓ 7. Replace the link with (loaded?) widget
-  8. Prettify it. Text color grey / standard h5 style. Bigger price. More shadows. border between price and title? Force double line height in title in all titles (visual coordination between widgets)
+✓ 8. Prettify it. Text color grey / standard h5 style. Bigger price. More shadows. border between price and title? Force double line height in title in all titles (visual coordination between widgets). Remove margin right in widget
+  9. Add support for new version of mercadolibre's products
