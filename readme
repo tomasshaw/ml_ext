@@ -1,19 +1,11 @@
 Chrome extension to visually upgrade MercadoLibre's comment section
 
 TODO:
-1. Init development folder structure for developing chrome extensions
-2. Create a manifest file
-3. Create front-side UI for comment replacement widget
-4. Create first iteration of regex matching ml's product links
-5. Create logic for detecting comment which matches the regex
-6. Load the widget data
-7. Replace the link with (loaded?) widget
-
-
-// curl -X GET https://api.mercadolibre.com/products/MLA6408981
-// 
-// Los productos/links que no empiezan con articulo. , tienen el codigo de producto al final.
-// Ej: https://www.mercadolibre.com.ar/disco-solido-interno-kingston-sa400s37240g-240gb/p/MLA6408981
-
-width 300px
-height 60-65
+✓ 1. Init development folder structure for developing chrome extensions
+✓ 2. Create a manifest file
+✓ 3. Create front-side UI for comment replacement widget
+✓ 4. Create first iteration of regex matching ml's product links
+✓ 5. Create logic for detecting comment which matches the regex
+✓ 6. Load the widget data
+✓ 7. Replace the link with (loaded?) widget
+  8. Prettify it. Text color grey / standard h5 style. Bigger price. More shadows. border between price and title? Force double line height in title in all titles (visual coordination between widgets)
