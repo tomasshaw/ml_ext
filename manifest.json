@@ -2,8 +2,14 @@
   "name": "ML Comment Replacer",
   "version": "0.0.1",
   "description": "This extension will replace ml's linked items with widgets showing the product info",
+  "icons": {
+    "16": "icons/MercadoComments16.png",
+    "32": "icons/MercadoComments32.png",
+    "48": "icons/MercadoComments48.png",
+    "128": "icons/MercadoComments128.png"
+  },
   "content_scripts": [{
-    "js": ["content.js"],
+    "js": ["src/content.js"],
     "matches": ["https://articulo.mercadolibre.com.ar/*", "https://www.mercadolibre.com.ar/*"]
   }],
   "permissions": ["https://articulo.mercadolibre.com.ar/*", "https://www.mercadolibre.com.ar/*"],
