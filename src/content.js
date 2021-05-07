@@ -123,7 +123,7 @@ async function getProductInfoWithApi(match) {
 		product.permalink,
 		product.price,
 		product.title,
-		product.pictures?.[0]?.secure_url || product.pictures?.[0]?.url
+		product.pictures?.[0]?.secure_url || product.pictures?.[0]?.url,
 	]
 }
 
@@ -131,7 +131,7 @@ main()
 
 try {
 	const observer = new MutationObserver(main())
-	observer.observe(document.getElementsByTagName('body')[0], {
+	observer.observe(document.getElementsByTagName('BODY')[0], {
 		subtree: true,
 		childList: true,
 	})
