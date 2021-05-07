@@ -13,17 +13,28 @@ function main() {
 async function createNewComments(textArray) {
 	const newCommentArray = await Promise.all(
 		textArray.map(async (word) => {
-			const matched = word.match('[MLml]{2}[A-z]{1}[-]?[0-9]+')
-			if (matched) {
-				const [
-					itemLink,
-					itemPrice,
-					itemName,
-					itemPicture,
-				] = await getProductInfoWithApi(matched[0])
-				return createHTMLWidget({ itemLink, itemPrice, itemName, itemPicture })
+			const matched = word.match('[Mm]{1}[Ll]{1}[A-z]{1}[-]?[0-9]+')
+			console.log(matched)
+			try {
+				if (matched) {
+					const [
+						itemLink,
+						itemPrice,
+						itemName,
+						itemPicture,
+					] = await getProductInfoWithApi(matched[0])
+					return createHTMLWidget({
+						itemLink,
+						itemPrice,
+						itemName,
+						itemPicture,
+					})
+				}
+			} catch (err) {
+				console.warn('No se encontro el item')
+			} finally {
+				return word
 			}
-			return word
 		})
 	)
 	return newCommentArray
@@ -60,6 +71,7 @@ function createHTMLWidget({ itemLink, itemPrice, itemName, itemPicture }) {
 				text-decoration: none;
 				color: rgba(0, 0, 0, 0.8);
 				text-align: center;
+				font-size: larger;
 			}
 			.ml_item_title{
 				text-decoration: none;
@@ -82,14 +94,14 @@ function createHTMLWidget({ itemLink, itemPrice, itemName, itemPicture }) {
 			}
 		</style>
 		<a href="${itemLink}" target="_blank" class="wrapperDiv">
-		<div class="ml_widget_picture">
-			<span class="img_helper"></span>
-			<img class="productImage" src=${itemPicture}>
-		</div>
-		<div class="ml_name_and_title">
-			<h5 class="ml_h5_text ml_item_title">${itemName}</h5>
-			<h5 class="ml_h5_text ml_item_price">$ ${itemPrice}</h5>
-		</div>
+			<div class="ml_widget_picture">
+				<span class="img_helper"></span>
+				<img class="productImage" src=${itemPicture}>
+			</div>
+			<div class="ml_name_and_title">
+				<h5 class="ml_h5_text ml_item_title">${itemName}</h5>
+				<h5 class="ml_h5_text ml_item_price">$ ${itemPrice}</h5>
+			</div>
 		</a>`
 	return htmlWidget
 }
@@ -101,17 +113,26 @@ async function getProductInfoWithApi(match) {
 	const res = await fetch(link, {
 		method: 'GET',
 	})
+	if (!res.ok) {
+		const text = await res.json()
+		throw text?.message || text
+	}
 	const productJSON = await res.json()
+	const product = productJSON[0].body
 	return [
-		productJSON.permalink,
-		productJSON.price,
-		productJSON.title,
-		productJSON.pictures[0].url,
+		product.permalink,
+		product.price,
+		product.title,
+		product.pictures?.[0]?.url,
 	]
 }
 
 main()
 
-document
-	.getElementsByClassName(matchingMoreQuestionsSelector)
-	.addEventListener('click', main)
+try {
+	document
+		.getElementsByClassName(matchingMoreQuestionsSelector)
+		.addEventListener('click', main)
+} catch (err) {
+	console.warn('No hay mas preguntas')
+}
