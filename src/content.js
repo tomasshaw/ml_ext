@@ -130,9 +130,11 @@ async function getProductInfoWithApi(match) {
 main()
 
 try {
-	document
-		.getElementsByClassName(matchingMoreQuestionsSelector)
-		.addEventListener('click', main)
+	const observer = new MutationObserver(main())
+	observer.observe(document.getElementsByTagName('body')[0], {
+		subtree: true,
+		childList: true,
+	})
 } catch (err) {
-	console.warn('No hay mas preguntas')
+	console.log('error al inicializar observer')
 }
