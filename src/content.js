@@ -1,48 +1,10 @@
 const matchingAnswerSelector =
 	'div.ui-pdp-questions__questions-list__container-answer__isNoCollapsed > span.ui-pdp-size--SMALL'
+const matchingAnswerSelectorModal =
+	'span.ui-pdp-questions__questions-list__answer-item__separate'
 const matchingMoreQuestionsSelector = 'ui-pdp-action-modal__link'
 
-function main() {
-	const answerArray = document.querySelectorAll(matchingAnswerSelector)
-	answerArray.forEach(async (htmlEl) => {
-		const newComments = await createNewComments(htmlEl.innerHTML.split(' '))
-		htmlEl.innerHTML = newComments.join(' ')
-	})
-}
-
-async function createNewComments(textArray) {
-	const newCommentArray = await Promise.all(
-		textArray.map(async (word) => {
-			const matched = word.match('[Mm]{1}[Ll]{1}[A-z]{1}[-]?[0-9]+')
-			try {
-				if (matched) {
-					console.log(matched)
-					const [
-						itemLink,
-						itemPrice,
-						itemName,
-						itemPicture,
-					] = await getProductInfoWithApi(matched[0])
-					return createHTMLWidget({
-						itemLink,
-						itemPrice,
-						itemName,
-						itemPicture,
-					})
-				}
-				return word
-			} catch (err) {
-				console.warn('No se encontro el item')
-				return word
-			}
-		})
-	)
-	return newCommentArray
-}
-
-function createHTMLWidget({ itemLink, itemPrice, itemName, itemPicture }) {
-	const htmlWidget = `
-		<style>
+const styles = `
 			.wrapperDiv {
 				margin: 4px 0;
 				width: calc(100% - 2px);
@@ -91,8 +53,63 @@ function createHTMLWidget({ itemLink, itemPrice, itemName, itemPicture }) {
 				display: inline-block;
 				height: 100%;
 				vertical-align: middle;
+			}`
+
+function main(insideModal = false) {
+	appendStyles(document)
+	let answerArray
+	if (!insideModal) {
+		answerArray = document.querySelectorAll(matchingAnswerSelector)
+	} else {
+		const el = document.querySelectorAll('iframe.ui-pdp-iframe')[0]
+		appendStyles(el.contentWindow.document)
+		answerArray = el.contentWindow.document.body.querySelectorAll(
+			matchingAnswerSelector
+		)
+	}
+	answerArray.forEach(async (htmlEl) => {
+		const newComments = await createNewComments(htmlEl.innerHTML.split(' '))
+		htmlEl.innerHTML = newComments.join(' ')
+	})
+}
+
+const appendStyles = (documentEl) => {
+	const style = documentEl.createElement('style')
+	style.appendChild(documentEl.createTextNode(styles))
+	documentEl.head.appendChild(style)
+}
+
+async function createNewComments(textArray) {
+	const newCommentArray = await Promise.all(
+		textArray.map(async (word) => {
+			const matched = word.match('[Mm]{1}[Ll]{1}[A-z]{1}[-]?[0-9]+')
+			try {
+				if (matched) {
+					const [
+						itemLink,
+						itemPrice,
+						itemName,
+						itemPicture,
+					] = await getProductInfoWithApi(matched[0])
+					return createHTMLWidget({
+						itemLink,
+						itemPrice,
+						itemName,
+						itemPicture,
+					})
+				}
+				return word
+			} catch (err) {
+				console.warn('No se encontro el item')
+				return word
 			}
-		</style>
+		})
+	)
+	return newCommentArray
+}
+
+function createHTMLWidget({ itemLink, itemPrice, itemName, itemPicture }) {
+	const htmlWidget = `
 		<a href="${itemLink}" target="_blank" class="wrapperDiv">
 			<div class="ml_widget_picture">
 				<span class="img_helper"></span>
@@ -123,16 +140,33 @@ async function getProductInfoWithApi(match) {
 		product.permalink,
 		product.price,
 		product.title,
-		product.pictures?.[0]?.url,
+		product.pictures?.[0]?.secure_url || product.pictures?.[0]?.url,
 	]
 }
 
 main()
 
 try {
-	document
-		.getElementsByClassName(matchingMoreQuestionsSelector)
-		.addEventListener('click', main)
+	let moreQuestionsEl
+	const moreQuestionsArr = document.getElementsByClassName(
+		matchingMoreQuestionsSelector
+	)
+	for (let item of moreQuestionsArr) {
+		if (item.innerHTML === 'Ver todas las preguntas') {
+			moreQuestionsEl = item
+			break
+		}
+	}
+
+	moreQuestionsEl.addEventListener(
+		'click',
+		() => {
+			setTimeout(() => {
+				main(true)
+			}, 2500)
+		},
+		false
+	)
 } catch (err) {
 	console.warn('No hay mas preguntas')
 }
