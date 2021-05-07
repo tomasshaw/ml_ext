@@ -1,23 +1,9 @@
-const priceExtras = {
-	stringMatch: 'price-tag-fraction',
-	charsToIgnore: 20,
-	charsLength: 12,
-}
-const nameExtras = {
-	stringMatch: 'item-title__primary',
-	charsToIgnore: 24,
-	charsLength: 60,
-}
-const pictureExtras = {
-	stringMatch: 'gallery__thumbnail',
-	charsToIgnore: 150,
-	charsLength: 400,
-	splitCond: '"',
-	arrPosWanted: 1,
-}
+const matchingAnswerSelector =
+	'div.ui-pdp-questions__questions-list__container-answer__isNoCollapsed > span.ui-pdp-size--SMALL'
+const matchingMoreQuestionsSelector = 'ui-pdp-action-modal__link'
 
 function main() {
-	const answerArray = document.querySelectorAll('div.questions__content p')
+	const answerArray = document.querySelectorAll(matchingAnswerSelector)
 	answerArray.forEach(async (htmlEl) => {
 		const newComments = await createNewComments(htmlEl.innerHTML.split(' '))
 		htmlEl.innerHTML = newComments.join(' ')
@@ -27,21 +13,15 @@ function main() {
 async function createNewComments(textArray) {
 	const newCommentArray = await Promise.all(
 		textArray.map(async (word) => {
-			const matched = word.match('articulo.mercadolibre.com.ar')
+			const matched = word.match('[MLml]{2}[A-z]{1}[-]?[0-9]+')
 			if (matched) {
-				const itemLink = matched.input
-				const [itemPrice, itemName, itemPicture] = await getProductInfo(
-					itemLink
-				)
-				return createHTMLWidget({ itemPrice, itemName, itemPicture, itemLink })
-			}
-			const newMatched = word.match('[p][/]{1}[MLml]{2}[A-z]{1}[0-9]+')
-			if (newMatched) {
-				const itemLink = newMatched.input
-				const [itemPrice, itemName, itemPicture] = await getProductInfoWithApi(
-					newMatched[0].split('/').pop()
-				)
-				return createHTMLWidget({ itemPrice, itemName, itemPicture, itemLink })
+				const [
+					itemLink,
+					itemPrice,
+					itemName,
+					itemPicture,
+				] = await getProductInfoWithApi(matched[0])
+				return createHTMLWidget({ itemLink, itemPrice, itemName, itemPicture })
 			}
 			return word
 		})
@@ -49,7 +29,7 @@ async function createNewComments(textArray) {
 	return newCommentArray
 }
 
-function createHTMLWidget({ itemPrice, itemName, itemPicture, itemLink }) {
+function createHTMLWidget({ itemLink, itemPrice, itemName, itemPicture }) {
 	const htmlWidget = `
 		<style>
 			.wrapperDiv {
@@ -115,39 +95,23 @@ function createHTMLWidget({ itemPrice, itemName, itemPicture, itemLink }) {
 }
 
 async function getProductInfoWithApi(match) {
-	const link = `https://api.mercadolibre.com/products/${match}`
+	const link = `https://api.mercadolibre.com/items?ids=${match
+		.split('-')
+		.join('')}`
 	const res = await fetch(link, {
 		method: 'GET',
 	})
 	const productJSON = await res.json()
 	return [
-		productJSON.buy_box_winner.price,
-		productJSON.name,
+		productJSON.permalink,
+		productJSON.price,
+		productJSON.title,
 		productJSON.pictures[0].url,
 	]
 }
 
-async function getProductInfo(link) {
-	//validar que sea link
-	const res = await fetch(link, {
-		method: 'GET',
-	})
-	const body = await res.text()
-	return [
-		getItemData(body, priceExtras),
-		getItemData(body, nameExtras),
-		getItemData(body, pictureExtras),
-	]
-}
-
-function getItemData(
-	htmlText,
-	{ stringMatch, charsToIgnore, charsLength, splitCond, arrPosWanted }
-) {
-	const filtered = htmlText
-		.substr(htmlText.search(stringMatch) + charsToIgnore, charsLength)
-		.split(splitCond || '<')
-	return filtered[arrPosWanted || 0].trim()
-}
-
 main()
+
+document
+	.getElementsByClassName(matchingMoreQuestionsSelector)
+	.addEventListener('click', main)

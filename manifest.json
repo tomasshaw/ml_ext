@@ -1,6 +1,6 @@
 {
   "name": "ML Comment Replacer",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "description": "This extension will replace ml's linked items with widgets showing the product info",
   "icons": {
     "16": "icons/MercadoComments16.png",
