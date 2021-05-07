@@ -123,7 +123,7 @@ async function getProductInfoWithApi(match) {
 		product.permalink,
 		product.price,
 		product.title,
-		product.pictures?.[0]?.url,
+		product.pictures?.[0]?.secure_url || product.pictures?.[0]?.url
 	]
 }
 
