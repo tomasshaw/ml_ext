@@ -130,11 +130,12 @@ async function getProductInfoWithApi(match) {
 main()
 
 try {
-	const observer = new MutationObserver(main())
+	const observer = new MutationObserver(main)
 	observer.observe(document.getElementsByTagName('BODY')[0], {
 		subtree: true,
 		childList: true,
 	})
 } catch (err) {
+	console.log(err)
 	console.log('error al inicializar observer')
 }
