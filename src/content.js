@@ -14,9 +14,9 @@ async function createNewComments(textArray) {
 	const newCommentArray = await Promise.all(
 		textArray.map(async (word) => {
 			const matched = word.match('[Mm]{1}[Ll]{1}[A-z]{1}[-]?[0-9]+')
-			console.log(matched)
 			try {
 				if (matched) {
+					console.log(matched)
 					const [
 						itemLink,
 						itemPrice,
@@ -30,9 +30,9 @@ async function createNewComments(textArray) {
 						itemPicture,
 					})
 				}
+				return word
 			} catch (err) {
 				console.warn('No se encontro el item')
-			} finally {
 				return word
 			}
 		})
