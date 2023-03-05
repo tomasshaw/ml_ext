@@ -4,7 +4,7 @@
   "description": "Chrome extension to visually upgrade MercadoLibre's comment section",
   "main": "content.js",
   "devDependencies": {
-    "commitizen": "^4.2.4",
+    "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.4.0",
     "eslint-config-prettier": "^6.11.0",
